@@ -2,6 +2,7 @@
 import scrapy
 
 from remix_scraping.items import RemixScrapingItem
+from w3lib.html import remove_tags
 
 
 class ProductDetailsSpider(scrapy.Spider):
@@ -15,7 +16,7 @@ class ProductDetailsSpider(scrapy.Spider):
 
     def parse(self, response):
         single_item = RemixScrapingItem()
-        single_item['title'] = response.css('.pr-title').extract_first().strip()
+        single_item['title'] = remove_tags(response.css('.pr-title').extract_first().strip())
         single_item['price'] = response.css('.product-price::text').extract_first().strip()
         if single_item['price'] == "":
             single_item['price'] = response.css('.new-price::text').extract_first().strip()
